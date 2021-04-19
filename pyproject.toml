@@ -1,0 +1,3 @@
+ld-system]
+requires = ["setuptools", "wheel", "Cython", "memory_allocator"]
+build-backend = "setuptools.build_meta"
