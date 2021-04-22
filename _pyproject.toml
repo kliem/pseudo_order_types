@@ -1,3 +1,5 @@
-ld-system]
+[build-system]
 requires = ["setuptools", "wheel", "Cython", "memory_allocator"]
 build-backend = "setuptools.build_meta"
+
+# TODO: Rename, one memory_allocator is on pypi.
