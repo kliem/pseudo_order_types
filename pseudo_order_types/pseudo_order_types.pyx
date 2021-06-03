@@ -2,6 +2,7 @@ from itertools import combinations, permutations, product, chain
 from memory_allocator.memory_allocator cimport MemoryAllocator
 from libc.string cimport memset, memcpy
 from libc.stdio cimport FILE, fopen, fclose, fwrite, fread
+cimport python_exc
 
 
 cdef struct impli:
@@ -296,6 +297,18 @@ def pseudo_order_type_writer(int n, path):
     .. SEEALSO::
 
         :func:`pseudo_order_type_iterator`
+
+    EXAMPLES::
+
+        >>> from pseudo_order_types.pseudo_order_types import pseudo_order_type_writer
+        >>> from pseudo_order_types.pseudo_order_types import pseudo_order_type_iterator
+        >>> it = pseudo_order_type_iterator(7)
+        >>> pseudo_order_type_writer(7, 'pseudo_order_types_tmp_file')
+        >>> it2 = pseudo_order_type_iterator(7, 'pseudo_order_types_tmp_file')
+        >>> all(next(it) == a for a in it2)
+        True
+        >>> import os
+        >>> os.remove("pseudo_order_types_tmp_file")
     """
     cdef MemoryAllocator mem = MemoryAllocator()
     cdef order_type_iter* it
@@ -309,14 +322,18 @@ def pseudo_order_type_writer(int n, path):
         raise IOError("cannot open file {}".format(path))
 
     if n == 3:
-        fwrite(&trivial, 1, sizeof(char), fp)
+        fwrite(&trivial, sizeof(char), 1, fp)
         fclose(fp)
         return
 
-    while next_order_type(it):
-        fwrite(it.choices[it.end - 1], it.end, sizeof(char), fp)
-
-    fclose(fp)
+    try:
+        while next_order_type(it):
+            if it.end != fwrite(it.choices[it.end - 1], sizeof(char), it.end, fp):
+                raise IOError("could not write to file")
+            if python_exc.PyErr_CheckSignals():
+                return
+    finally:
+        fclose(fp)
 
 
 def _pseudo_order_type_iterator(int n):
@@ -362,12 +379,24 @@ def pseudo_order_type_iterator(int n, path=None):
 
         >>> from pseudo_order_types.pseudo_order_types import pseudo_order_type_iterator
         >>> it = pseudo_order_type_iterator(5)
-        >>> next(it)
+        >>> for i in it:
+        ...     print(i)
         (-1, -1, -1, -1, -1, -1, 1, 1, 1, 1)
-        >>> next(it)
         (-1, -1, -1, -1, -1, -1, 1, 1, -1, -1)
-        >>> next(it)
         (-1, -1, -1, -1, -1, -1, -1, -1, -1, -1)
+        >>> it = pseudo_order_type_iterator(6)
+        >>> next(it)
+        (-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
+        >>> next(it)
+        (-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 1, 1, 1, 1, 1, 1, 1, 1, 1, -1)
+        >>> next(it)
+        (-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 1, 1, 1, 1, 1, 1, 1, 1, -1, -1)
+        >>> sum(1 for _ in pseudo_order_type_iterator(6))
+        16
+        >>> sum(1 for _ in pseudo_order_type_iterator(7))
+        135
+        >>> sum(1 for _ in pseudo_order_type_iterator(8))
+        3315
 
     Store to a file with ``pseudo_order_type_writer``::
 
@@ -391,20 +420,119 @@ def pseudo_order_type_iterator(int n, path=None):
     cdef size_t end = len(combs)
     cdef MemoryAllocator mem = MemoryAllocator()
     cdef char* choices = <char*> mem.allocarray(len(combs), sizeof(char))
+    cdef size_t count
     try:
-        while fread(choices, end, sizeof(char), fp):
-            yield tuple(choices[i] for i in range(len(combs)))
+        while True:
+            count = fread(choices, sizeof(char), end, fp)
+            if count == end:
+                yield tuple(choices[i] for i in range(len(combs)))
+            elif count == 0:
+                return
+            else:
+                raise IOError("size of file is incorrect")
     finally:
         fclose(fp)
 
 
 def all_implications(n, r=3):
-    return tuple(set(all_implications_iter(n, r)))
-
-
-def all_implications_iter(n, r=3):
     """
-    Yield all implications by the chirotope exchange axiom for rank ``r``.
+    Return all implications by the chirotope exchange axiom for rank ``r``.
+
+    INPUT:
+
+    - ``n`` -- integer greater or equal to ``3``; the size of the chirotope
+    - ``r`` -- integer greater or equal to ``2``; the rank of the matroid
+
+    OUTPUT:
+
+    Each implication is given by as lists ``same, opposite``.
+
+    Each element in ``same`` or ``opposite`` is given as tuples ``(A, B)``.
+    The implication is of the form that it cannot hold that
+    ``xi(A)*xi(B) >= 0`` for all ``(A, B)`` in ``same`` and
+    ``xi(A)*xi(B) <= 0`` for all ``(A, B)`` in ``opposite``.
+
+    So at least one of the inequalities cannot hold.
+
+    EXAMPLES::
+
+        >>> from pseudo_order_types.pseudo_order_types import all_implications, implication_printer
+        >>> s = all_implications(5)
+        >>> len(s)
+        10
+        >>> for x in s:
+        ...     print(x)
+        ((((0, 2, 3), (1, 2, 4)),), (((0, 1, 2), (2, 3, 4)), ((0, 2, 4), (1, 2, 3))))
+        ((((0, 1, 4), (2, 3, 4)), ((0, 3, 4), (1, 2, 4))), (((0, 2, 4), (1, 3, 4)),))
+        ((((0, 1, 2), (2, 3, 4)), ((0, 2, 4), (1, 2, 3))), (((0, 2, 3), (1, 2, 4)),))
+        ((((0, 2, 4), (1, 3, 4)),), (((0, 1, 4), (2, 3, 4)), ((0, 3, 4), (1, 2, 4))))
+        ((((0, 1, 3), (2, 3, 4)), ((0, 3, 4), (1, 2, 3))), (((0, 2, 3), (1, 3, 4)),))
+        ((((0, 1, 3), (0, 2, 4)),), (((0, 1, 2), (0, 3, 4)), ((0, 1, 4), (0, 2, 3))))
+        ((((0, 1, 3), (1, 2, 4)),), (((0, 1, 2), (1, 3, 4)), ((0, 1, 4), (1, 2, 3))))
+        ((((0, 1, 2), (0, 3, 4)), ((0, 1, 4), (0, 2, 3))), (((0, 1, 3), (0, 2, 4)),))
+        ((((0, 1, 2), (1, 3, 4)), ((0, 1, 4), (1, 2, 3))), (((0, 1, 3), (1, 2, 4)),))
+        ((((0, 2, 3), (1, 3, 4)),), (((0, 1, 3), (2, 3, 4)), ((0, 3, 4), (1, 2, 3))))
+        >>> for same, opposite in s:
+        ...     implication_printer(same, opposite)
+        One of the following does not hold:
+        xi(0, 2, 3)*xi(1, 2, 4) >= 0
+        xi(0, 1, 2)*xi(2, 3, 4) <= 0
+        xi(0, 2, 4)*xi(1, 2, 3) <= 0
+        One of the following does not hold:
+        xi(0, 1, 4)*xi(2, 3, 4) >= 0
+        xi(0, 3, 4)*xi(1, 2, 4) >= 0
+        xi(0, 2, 4)*xi(1, 3, 4) <= 0
+        One of the following does not hold:
+        xi(0, 1, 2)*xi(2, 3, 4) >= 0
+        xi(0, 2, 4)*xi(1, 2, 3) >= 0
+        xi(0, 2, 3)*xi(1, 2, 4) <= 0
+        One of the following does not hold:
+        xi(0, 2, 4)*xi(1, 3, 4) >= 0
+        xi(0, 1, 4)*xi(2, 3, 4) <= 0
+        xi(0, 3, 4)*xi(1, 2, 4) <= 0
+        One of the following does not hold:
+        xi(0, 1, 3)*xi(2, 3, 4) >= 0
+        xi(0, 3, 4)*xi(1, 2, 3) >= 0
+        xi(0, 2, 3)*xi(1, 3, 4) <= 0
+        One of the following does not hold:
+        xi(0, 1, 3)*xi(0, 2, 4) >= 0
+        xi(0, 1, 2)*xi(0, 3, 4) <= 0
+        xi(0, 1, 4)*xi(0, 2, 3) <= 0
+        One of the following does not hold:
+        xi(0, 1, 3)*xi(1, 2, 4) >= 0
+        xi(0, 1, 2)*xi(1, 3, 4) <= 0
+        xi(0, 1, 4)*xi(1, 2, 3) <= 0
+        One of the following does not hold:
+        xi(0, 1, 2)*xi(0, 3, 4) >= 0
+        xi(0, 1, 4)*xi(0, 2, 3) >= 0
+        xi(0, 1, 3)*xi(0, 2, 4) <= 0
+        One of the following does not hold:
+        xi(0, 1, 2)*xi(1, 3, 4) >= 0
+        xi(0, 1, 4)*xi(1, 2, 3) >= 0
+        xi(0, 1, 3)*xi(1, 2, 4) <= 0
+        One of the following does not hold:
+        xi(0, 2, 3)*xi(1, 3, 4) >= 0
+        xi(0, 1, 3)*xi(2, 3, 4) <= 0
+        xi(0, 3, 4)*xi(1, 2, 3) <= 0
+        >>> s = all_implications(5, 2)
+        >>> implication_printer(*s[0])
+        One of the following does not hold:
+        xi(0, 1)*xi(3, 4) >= 0
+        xi(0, 4)*xi(1, 3) >= 0
+        xi(0, 3)*xi(1, 4) <= 0
+        >>> s = all_implications(6, 4)
+        >>> implication_printer(*s[0])
+        One of the following does not hold:
+        xi(0, 1, 2, 4)*xi(1, 3, 4, 5) >= 0
+        xi(0, 1, 4, 5)*xi(1, 2, 3, 4) >= 0
+        xi(0, 1, 3, 4)*xi(1, 2, 4, 5) <= 0
+    """
+    return tuple(set(_all_implications_iter(n, r)))
+
+
+def _all_implications_iter(n, r=3):
+    """
+    Yield all implications by the chirotope exchange axiom for rank ``r`` with repeats.
 
     Each implication is given by as lists ``same, opposite``.
 
@@ -474,3 +602,27 @@ def all_implications_iter(n, r=3):
                             opposite.append(sort(sort(*A2), sort(*B2)))
 
                     yield (sort(*same), sort(*opposite))
+                    if python_exc.PyErr_CheckSignals():
+                        return
+
+
+def implication_printer(same, opposite):
+    r"""
+    Print ``all_implications`` in a meaningful way.
+
+    EXAMPLES::
+
+        >>> from pseudo_order_types.pseudo_order_types import all_implications, implication_printer
+        >>> s = all_implications(6)
+        >>> implication_printer(*s[5])
+        One of the following does not hold:
+        xi(0, 1, 3)*xi(0, 2, 4) >= 0
+        xi(0, 1, 2)*xi(0, 3, 4) <= 0
+        xi(0, 1, 4)*xi(0, 2, 3) <= 0
+    """
+    output = "One of the following does not hold:"
+    for a, b in same:
+        output += "\nxi{}*xi{} >= 0".format(a, b)
+    for a, b in opposite:
+        output += "\nxi{}*xi{} <= 0".format(a, b)
+    print(output)
