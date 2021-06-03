@@ -373,10 +373,12 @@ def pseudo_order_type_iterator(int n, path=None):
 
         >>> from pseudo_order_types.pseudo_order_types import pseudo_order_type_writer
         >>> from pseudo_order_types.pseudo_order_types import pseudo_order_type_iterator
-        >>> pseudo_order_type_writer(6, 'foo')
-        >>> it = pseudo_order_type_iterator(6, 'foo')
+        >>> pseudo_order_type_writer(6, 'pseudo_order_types_tmp_file')
+        >>> it = pseudo_order_type_iterator(6, 'pseudo_order_types_tmp_file')
         >>> next(it)
         (-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
+        >>> import os
+        >>> os.remove("pseudo_order_types_tmp_file")
     """
     if not path:
         yield from _pseudo_order_type_iterator(n)
