@@ -17,10 +17,7 @@ saving and loading them.
 
 ## Dependencies
 
-It depends on https://github.com/kliem/memory_allocator/,
-which is not yet on pypi.org/.
-
-Other dependencies:
 - `setuptools`,
 - `wheel`,
-- `Cython`.
+- `Cython`,
+- `memory_allocator`.
