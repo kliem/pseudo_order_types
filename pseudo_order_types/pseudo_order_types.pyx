@@ -457,51 +457,23 @@ def all_implications(n, r=3):
     EXAMPLES::
 
         >>> from pseudo_order_types.pseudo_order_types import all_implications, implication_printer
-        >>> s = all_implications(5)
+        >>> s = sorted(all_implications(5))
         >>> len(s)
         10
         >>> for x in s:
         ...     print(x)
-        ((((0, 2, 3), (1, 2, 4)),), (((0, 1, 2), (2, 3, 4)), ((0, 2, 4), (1, 2, 3))))
-        ((((0, 1, 4), (2, 3, 4)), ((0, 3, 4), (1, 2, 4))), (((0, 2, 4), (1, 3, 4)),))
-        ((((0, 1, 2), (2, 3, 4)), ((0, 2, 4), (1, 2, 3))), (((0, 2, 3), (1, 2, 4)),))
-        ((((0, 2, 4), (1, 3, 4)),), (((0, 1, 4), (2, 3, 4)), ((0, 3, 4), (1, 2, 4))))
-        ((((0, 1, 3), (2, 3, 4)), ((0, 3, 4), (1, 2, 3))), (((0, 2, 3), (1, 3, 4)),))
-        ((((0, 1, 3), (0, 2, 4)),), (((0, 1, 2), (0, 3, 4)), ((0, 1, 4), (0, 2, 3))))
-        ((((0, 1, 3), (1, 2, 4)),), (((0, 1, 2), (1, 3, 4)), ((0, 1, 4), (1, 2, 3))))
         ((((0, 1, 2), (0, 3, 4)), ((0, 1, 4), (0, 2, 3))), (((0, 1, 3), (0, 2, 4)),))
         ((((0, 1, 2), (1, 3, 4)), ((0, 1, 4), (1, 2, 3))), (((0, 1, 3), (1, 2, 4)),))
+        ((((0, 1, 2), (2, 3, 4)), ((0, 2, 4), (1, 2, 3))), (((0, 2, 3), (1, 2, 4)),))
+        ((((0, 1, 3), (0, 2, 4)),), (((0, 1, 2), (0, 3, 4)), ((0, 1, 4), (0, 2, 3))))
+        ((((0, 1, 3), (1, 2, 4)),), (((0, 1, 2), (1, 3, 4)), ((0, 1, 4), (1, 2, 3))))
+        ((((0, 1, 3), (2, 3, 4)), ((0, 3, 4), (1, 2, 3))), (((0, 2, 3), (1, 3, 4)),))
+        ((((0, 1, 4), (2, 3, 4)), ((0, 3, 4), (1, 2, 4))), (((0, 2, 4), (1, 3, 4)),))
+        ((((0, 2, 3), (1, 2, 4)),), (((0, 1, 2), (2, 3, 4)), ((0, 2, 4), (1, 2, 3))))
         ((((0, 2, 3), (1, 3, 4)),), (((0, 1, 3), (2, 3, 4)), ((0, 3, 4), (1, 2, 3))))
+        ((((0, 2, 4), (1, 3, 4)),), (((0, 1, 4), (2, 3, 4)), ((0, 3, 4), (1, 2, 4))))
         >>> for same, opposite in s:
         ...     implication_printer(same, opposite)
-        One of the following does not hold:
-        xi(0, 2, 3)*xi(1, 2, 4) >= 0
-        xi(0, 1, 2)*xi(2, 3, 4) <= 0
-        xi(0, 2, 4)*xi(1, 2, 3) <= 0
-        One of the following does not hold:
-        xi(0, 1, 4)*xi(2, 3, 4) >= 0
-        xi(0, 3, 4)*xi(1, 2, 4) >= 0
-        xi(0, 2, 4)*xi(1, 3, 4) <= 0
-        One of the following does not hold:
-        xi(0, 1, 2)*xi(2, 3, 4) >= 0
-        xi(0, 2, 4)*xi(1, 2, 3) >= 0
-        xi(0, 2, 3)*xi(1, 2, 4) <= 0
-        One of the following does not hold:
-        xi(0, 2, 4)*xi(1, 3, 4) >= 0
-        xi(0, 1, 4)*xi(2, 3, 4) <= 0
-        xi(0, 3, 4)*xi(1, 2, 4) <= 0
-        One of the following does not hold:
-        xi(0, 1, 3)*xi(2, 3, 4) >= 0
-        xi(0, 3, 4)*xi(1, 2, 3) >= 0
-        xi(0, 2, 3)*xi(1, 3, 4) <= 0
-        One of the following does not hold:
-        xi(0, 1, 3)*xi(0, 2, 4) >= 0
-        xi(0, 1, 2)*xi(0, 3, 4) <= 0
-        xi(0, 1, 4)*xi(0, 2, 3) <= 0
-        One of the following does not hold:
-        xi(0, 1, 3)*xi(1, 2, 4) >= 0
-        xi(0, 1, 2)*xi(1, 3, 4) <= 0
-        xi(0, 1, 4)*xi(1, 2, 3) <= 0
         One of the following does not hold:
         xi(0, 1, 2)*xi(0, 3, 4) >= 0
         xi(0, 1, 4)*xi(0, 2, 3) >= 0
@@ -511,21 +483,49 @@ def all_implications(n, r=3):
         xi(0, 1, 4)*xi(1, 2, 3) >= 0
         xi(0, 1, 3)*xi(1, 2, 4) <= 0
         One of the following does not hold:
+        xi(0, 1, 2)*xi(2, 3, 4) >= 0
+        xi(0, 2, 4)*xi(1, 2, 3) >= 0
+        xi(0, 2, 3)*xi(1, 2, 4) <= 0
+        One of the following does not hold:
+        xi(0, 1, 3)*xi(0, 2, 4) >= 0
+        xi(0, 1, 2)*xi(0, 3, 4) <= 0
+        xi(0, 1, 4)*xi(0, 2, 3) <= 0
+        One of the following does not hold:
+        xi(0, 1, 3)*xi(1, 2, 4) >= 0
+        xi(0, 1, 2)*xi(1, 3, 4) <= 0
+        xi(0, 1, 4)*xi(1, 2, 3) <= 0
+        One of the following does not hold:
+        xi(0, 1, 3)*xi(2, 3, 4) >= 0
+        xi(0, 3, 4)*xi(1, 2, 3) >= 0
+        xi(0, 2, 3)*xi(1, 3, 4) <= 0
+        One of the following does not hold:
+        xi(0, 1, 4)*xi(2, 3, 4) >= 0
+        xi(0, 3, 4)*xi(1, 2, 4) >= 0
+        xi(0, 2, 4)*xi(1, 3, 4) <= 0
+        One of the following does not hold:
+        xi(0, 2, 3)*xi(1, 2, 4) >= 0
+        xi(0, 1, 2)*xi(2, 3, 4) <= 0
+        xi(0, 2, 4)*xi(1, 2, 3) <= 0
+        One of the following does not hold:
         xi(0, 2, 3)*xi(1, 3, 4) >= 0
         xi(0, 1, 3)*xi(2, 3, 4) <= 0
         xi(0, 3, 4)*xi(1, 2, 3) <= 0
-        >>> s = all_implications(5, 2)
+        One of the following does not hold:
+        xi(0, 2, 4)*xi(1, 3, 4) >= 0
+        xi(0, 1, 4)*xi(2, 3, 4) <= 0
+        xi(0, 3, 4)*xi(1, 2, 4) <= 0
+        >>> s = sorted(all_implications(5, 2))
         >>> implication_printer(*s[0])
         One of the following does not hold:
-        xi(0, 1)*xi(3, 4) >= 0
-        xi(0, 4)*xi(1, 3) >= 0
-        xi(0, 3)*xi(1, 4) <= 0
-        >>> s = all_implications(6, 4)
+        xi(0, 1)*xi(2, 3) >= 0
+        xi(0, 3)*xi(1, 2) >= 0
+        xi(0, 2)*xi(1, 3) <= 0
+        >>> s = sorted(all_implications(6, 4))
         >>> implication_printer(*s[0])
         One of the following does not hold:
-        xi(0, 1, 2, 4)*xi(1, 3, 4, 5) >= 0
-        xi(0, 1, 4, 5)*xi(1, 2, 3, 4) >= 0
-        xi(0, 1, 3, 4)*xi(1, 2, 4, 5) <= 0
+        xi(0, 1, 2, 3)*xi(0, 1, 4, 5) >= 0
+        xi(0, 1, 2, 5)*xi(0, 1, 3, 4) >= 0
+        xi(0, 1, 2, 4)*xi(0, 1, 3, 5) <= 0
     """
     return tuple(set(_all_implications_iter(n, r)))
 
@@ -613,12 +613,12 @@ def implication_printer(same, opposite):
     EXAMPLES::
 
         >>> from pseudo_order_types.pseudo_order_types import all_implications, implication_printer
-        >>> s = all_implications(6)
+        >>> s = sorted(all_implications(6))
         >>> implication_printer(*s[5])
         One of the following does not hold:
-        xi(0, 1, 3)*xi(0, 2, 4) >= 0
-        xi(0, 1, 2)*xi(0, 3, 4) <= 0
-        xi(0, 1, 4)*xi(0, 2, 3) <= 0
+        xi(0, 1, 2)*xi(1, 4, 5) >= 0
+        xi(0, 1, 5)*xi(1, 2, 4) >= 0
+        xi(0, 1, 4)*xi(1, 2, 5) <= 0
     """
     output = "One of the following does not hold:"
     for a, b in same:
