@@ -105,6 +105,7 @@ cdef order_type_iter* prepare_order_type_iter(int n, MemoryAllocator mem) except
 
     # We may assume that ``0`` is a vertex of the convex hull and
     # ``1, ..., n-1`` are sorted counter-clockwise.
+    # This is exactly where we assume that the chirotope is acyclic.
     cdef int minimal_pos = combs_inv[1, 2, 3]
     cdef int pos = minimal_pos
     cdef char** choices = <char**> mem.allocarray(end, sizeof(char*))
@@ -283,7 +284,7 @@ cdef bint next_order_type(order_type_iter* it):
 
 def pseudo_order_type_writer(int n, path):
     """
-    Write all non-degenerate chirotopes with base set 0,..,n-1 of rank 3 to a file.
+    Write all non-degenerate acyclic chirotopes with base set 0,..,n-1 of rank 3 to a file.
 
     The following symmetries are quotiened out:
     - relabeling of the points,
@@ -338,7 +339,7 @@ def pseudo_order_type_writer(int n, path):
 
 def _pseudo_order_type_iterator(int n):
     """
-    Helper function to iterate of non-degenerate chirotopes of rank 3.
+    Helper function to iterate of non-degenerate acyclic chirotopes of rank 3.
 
     .. SEEALSO::
 
@@ -358,7 +359,7 @@ def _pseudo_order_type_iterator(int n):
 
 def pseudo_order_type_iterator(int n, path=None):
     """
-    Iterate over all non-degenerate chirotopes with base set 0,..,n-1 of rank 3.
+    Iterate over all non-degenerate acyclic chirotopes with base set 0,..,n-1 of rank 3.
 
     The following symmetries are quotiened out:
     - relabeling of the points,
