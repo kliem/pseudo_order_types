@@ -288,7 +288,7 @@ def pseudo_order_type_writer(int n, path):
 
     The following symmetries are quotiened out:
     - relabeling of the points,
-    - replacing ``xi`` by ``-xi``; switching all signs.
+    - replacing ``chi`` by ``-chi``; switching all signs.
 
     INPUT:
 
@@ -363,7 +363,7 @@ def pseudo_order_type_iterator(int n, path=None):
 
     The following symmetries are quotiened out:
     - relabeling of the points,
-    - replacing ``xi`` by ``-xi``; switching all signs.
+    - replacing ``chi`` by ``-chi``; switching all signs.
 
     INPUT:
 
@@ -437,7 +437,7 @@ def pseudo_order_type_iterator(int n, path=None):
 
 def all_implications(n, r=3):
     """
-    Return all implications by the chirotope exchange axiom for rank ``r``.
+    Return all implications by the chirotope exchange achiom for rank ``r``.
 
     INPUT:
 
@@ -450,8 +450,8 @@ def all_implications(n, r=3):
 
     Each element in ``same`` or ``opposite`` is given as tuples ``(A, B)``.
     The implication is of the form that it cannot hold that
-    ``xi(A)*xi(B) >= 0`` for all ``(A, B)`` in ``same`` and
-    ``xi(A)*xi(B) <= 0`` for all ``(A, B)`` in ``opposite``.
+    ``chi(A)*chi(B) >= 0`` for all ``(A, B)`` in ``same`` and
+    ``chi(A)*chi(B) <= 0`` for all ``(A, B)`` in ``opposite``.
 
     So at least one of the inequalities cannot hold.
 
@@ -476,71 +476,71 @@ def all_implications(n, r=3):
         >>> for same, opposite in s:
         ...     implication_printer(same, opposite)
         One of the following does not hold:
-        xi(0, 1, 2)*xi(0, 3, 4) >= 0
-        xi(0, 1, 4)*xi(0, 2, 3) >= 0
-        xi(0, 1, 3)*xi(0, 2, 4) <= 0
+        chi(0, 1, 2)*chi(0, 3, 4) >= 0
+        chi(0, 1, 4)*chi(0, 2, 3) >= 0
+        chi(0, 1, 3)*chi(0, 2, 4) <= 0
         One of the following does not hold:
-        xi(0, 1, 2)*xi(1, 3, 4) >= 0
-        xi(0, 1, 4)*xi(1, 2, 3) >= 0
-        xi(0, 1, 3)*xi(1, 2, 4) <= 0
+        chi(0, 1, 2)*chi(1, 3, 4) >= 0
+        chi(0, 1, 4)*chi(1, 2, 3) >= 0
+        chi(0, 1, 3)*chi(1, 2, 4) <= 0
         One of the following does not hold:
-        xi(0, 1, 2)*xi(2, 3, 4) >= 0
-        xi(0, 2, 4)*xi(1, 2, 3) >= 0
-        xi(0, 2, 3)*xi(1, 2, 4) <= 0
+        chi(0, 1, 2)*chi(2, 3, 4) >= 0
+        chi(0, 2, 4)*chi(1, 2, 3) >= 0
+        chi(0, 2, 3)*chi(1, 2, 4) <= 0
         One of the following does not hold:
-        xi(0, 1, 3)*xi(0, 2, 4) >= 0
-        xi(0, 1, 2)*xi(0, 3, 4) <= 0
-        xi(0, 1, 4)*xi(0, 2, 3) <= 0
+        chi(0, 1, 3)*chi(0, 2, 4) >= 0
+        chi(0, 1, 2)*chi(0, 3, 4) <= 0
+        chi(0, 1, 4)*chi(0, 2, 3) <= 0
         One of the following does not hold:
-        xi(0, 1, 3)*xi(1, 2, 4) >= 0
-        xi(0, 1, 2)*xi(1, 3, 4) <= 0
-        xi(0, 1, 4)*xi(1, 2, 3) <= 0
+        chi(0, 1, 3)*chi(1, 2, 4) >= 0
+        chi(0, 1, 2)*chi(1, 3, 4) <= 0
+        chi(0, 1, 4)*chi(1, 2, 3) <= 0
         One of the following does not hold:
-        xi(0, 1, 3)*xi(2, 3, 4) >= 0
-        xi(0, 3, 4)*xi(1, 2, 3) >= 0
-        xi(0, 2, 3)*xi(1, 3, 4) <= 0
+        chi(0, 1, 3)*chi(2, 3, 4) >= 0
+        chi(0, 3, 4)*chi(1, 2, 3) >= 0
+        chi(0, 2, 3)*chi(1, 3, 4) <= 0
         One of the following does not hold:
-        xi(0, 1, 4)*xi(2, 3, 4) >= 0
-        xi(0, 3, 4)*xi(1, 2, 4) >= 0
-        xi(0, 2, 4)*xi(1, 3, 4) <= 0
+        chi(0, 1, 4)*chi(2, 3, 4) >= 0
+        chi(0, 3, 4)*chi(1, 2, 4) >= 0
+        chi(0, 2, 4)*chi(1, 3, 4) <= 0
         One of the following does not hold:
-        xi(0, 2, 3)*xi(1, 2, 4) >= 0
-        xi(0, 1, 2)*xi(2, 3, 4) <= 0
-        xi(0, 2, 4)*xi(1, 2, 3) <= 0
+        chi(0, 2, 3)*chi(1, 2, 4) >= 0
+        chi(0, 1, 2)*chi(2, 3, 4) <= 0
+        chi(0, 2, 4)*chi(1, 2, 3) <= 0
         One of the following does not hold:
-        xi(0, 2, 3)*xi(1, 3, 4) >= 0
-        xi(0, 1, 3)*xi(2, 3, 4) <= 0
-        xi(0, 3, 4)*xi(1, 2, 3) <= 0
+        chi(0, 2, 3)*chi(1, 3, 4) >= 0
+        chi(0, 1, 3)*chi(2, 3, 4) <= 0
+        chi(0, 3, 4)*chi(1, 2, 3) <= 0
         One of the following does not hold:
-        xi(0, 2, 4)*xi(1, 3, 4) >= 0
-        xi(0, 1, 4)*xi(2, 3, 4) <= 0
-        xi(0, 3, 4)*xi(1, 2, 4) <= 0
+        chi(0, 2, 4)*chi(1, 3, 4) >= 0
+        chi(0, 1, 4)*chi(2, 3, 4) <= 0
+        chi(0, 3, 4)*chi(1, 2, 4) <= 0
         >>> s = sorted(all_implications(5, 2))
         >>> implication_printer(*s[0])
         One of the following does not hold:
-        xi(0, 1)*xi(2, 3) >= 0
-        xi(0, 3)*xi(1, 2) >= 0
-        xi(0, 2)*xi(1, 3) <= 0
+        chi(0, 1)*chi(2, 3) >= 0
+        chi(0, 3)*chi(1, 2) >= 0
+        chi(0, 2)*chi(1, 3) <= 0
         >>> s = sorted(all_implications(6, 4))
         >>> implication_printer(*s[0])
         One of the following does not hold:
-        xi(0, 1, 2, 3)*xi(0, 1, 4, 5) >= 0
-        xi(0, 1, 2, 5)*xi(0, 1, 3, 4) >= 0
-        xi(0, 1, 2, 4)*xi(0, 1, 3, 5) <= 0
+        chi(0, 1, 2, 3)*chi(0, 1, 4, 5) >= 0
+        chi(0, 1, 2, 5)*chi(0, 1, 3, 4) >= 0
+        chi(0, 1, 2, 4)*chi(0, 1, 3, 5) <= 0
     """
     return tuple(set(_all_implications_iter(n, r)))
 
 
 def _all_implications_iter(n, r=3):
     """
-    Yield all implications by the chirotope exchange axiom for rank ``r`` with repeats.
+    Yield all implications by the chirotope exchange achiom for rank ``r`` with repeats.
 
     Each implication is given by as lists ``same, opposite``.
 
     Each element in ``same`` or ``opposite`` is given as tuples ``(A, B)``.
     The implication is of the form that it cannot hold that
-    ``xi(A)*xi(B) >= 0`` for all ``(A, B)`` in ``same`` and
-    ``xi(A)*xi(B) <= 0`` for all ``(A, B)`` in ``opposite``.
+    ``chi(A)*chi(B) >= 0`` for all ``(A, B)`` in ``same`` and
+    ``chi(A)*chi(B) <= 0`` for all ``(A, B)`` in ``opposite``.
 
     So at least one of the inequalities cannot hold.
     """
@@ -557,13 +557,13 @@ def _all_implications_iter(n, r=3):
         else:
             return 1
 
-    # Note that we only store xi(a, b, c) for a < b < c.
-    # So xi(a, b, c) = sign(a, b, c) * xi(sort(a, b, c)).
+    # Note that we only store chi(a, b, c) for a < b < c.
+    # So chi(a, b, c) = sign(a, b, c) * chi(sort(a, b, c)).
 
     def sort(*args):
         return tuple(sorted(args))
 
-    # For each A and B, we get the impliciations by the exchange axiom.
+    # For each A and B, we get the impliciations by the exchange achiom.
     for A1 in combinations(range(n), r):
         for A in permutations(A1):
             for B1 in combinations(range(n), r):
@@ -578,13 +578,13 @@ def _all_implications_iter(n, r=3):
                     same = []
                     opposite = []
 
-                    # The chirotope exchange axiom for A, B is that from all the following,
+                    # The chirotope exchange achiom for A, B is that from all the following,
                     # at least one has to be false:
-                    # xi(a_1,a_2,...,a_n) * xi(b_1,b_2,b_3,...,b_n) <= 0
-                    # xi(b_1,a_2,...,a_n) * xi(a_1,b_2,b_3,...,b_n) >= 0
-                    # xi(b_2,a_2,...,a_n) * xi(b_1,a_1,b_3,...,b_n) >= 0
+                    # chi(a_1,a_2,...,a_n) * chi(b_1,b_2,b_3,...,b_n) <= 0
+                    # chi(b_1,a_2,...,a_n) * chi(a_1,b_2,b_3,...,b_n) >= 0
+                    # chi(b_2,a_2,...,a_n) * chi(b_1,a_1,b_3,...,b_n) >= 0
                     # ...
-                    # xi(b_n,a_2,...,a_n) * xi(b_1,b_2,...,b_(n-1),a_1) >= 0
+                    # chi(b_n,a_2,...,a_n) * chi(b_1,b_2,...,b_(n-1),a_1) >= 0
 
                     if sign(*A) * sign(*B) == 1:
                         opposite.append(sort(sort(*A), sort(*B)))
@@ -617,13 +617,13 @@ def implication_printer(same, opposite):
         >>> s = sorted(all_implications(6))
         >>> implication_printer(*s[5])
         One of the following does not hold:
-        xi(0, 1, 2)*xi(1, 4, 5) >= 0
-        xi(0, 1, 5)*xi(1, 2, 4) >= 0
-        xi(0, 1, 4)*xi(1, 2, 5) <= 0
+        chi(0, 1, 2)*chi(1, 4, 5) >= 0
+        chi(0, 1, 5)*chi(1, 2, 4) >= 0
+        chi(0, 1, 4)*chi(1, 2, 5) <= 0
     """
     output = "One of the following does not hold:"
     for a, b in same:
-        output += "\nxi{}*xi{} >= 0".format(a, b)
+        output += "\nchi{}*chi{} >= 0".format(a, b)
     for a, b in opposite:
-        output += "\nxi{}*xi{} <= 0".format(a, b)
+        output += "\nchi{}*chi{} <= 0".format(a, b)
     print(output)
