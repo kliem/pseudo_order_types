@@ -437,7 +437,7 @@ def pseudo_order_type_iterator(int n, path=None):
 
 def all_implications(n, r=3):
     """
-    Return all implications by the chirotope exchange achiom for rank ``r``.
+    Return all implications by the chirotope exchange axiom for rank ``r``.
 
     INPUT:
 
@@ -533,7 +533,7 @@ def all_implications(n, r=3):
 
 def _all_implications_iter(n, r=3):
     """
-    Yield all implications by the chirotope exchange achiom for rank ``r`` with repeats.
+    Yield all implications by the chirotope exchange axiom for rank ``r`` with repeats.
 
     Each implication is given by as lists ``same, opposite``.
 
@@ -563,7 +563,7 @@ def _all_implications_iter(n, r=3):
     def sort(*args):
         return tuple(sorted(args))
 
-    # For each A and B, we get the impliciations by the exchange achiom.
+    # For each A and B, we get the impliciations by the exchange axiom.
     for A1 in combinations(range(n), r):
         for A in permutations(A1):
             for B1 in combinations(range(n), r):
@@ -578,7 +578,7 @@ def _all_implications_iter(n, r=3):
                     same = []
                     opposite = []
 
-                    # The chirotope exchange achiom for A, B is that from all the following,
+                    # The chirotope exchange axiom for A, B is that from all the following,
                     # at least one has to be false:
                     # chi(a_1,a_2,...,a_n) * chi(b_1,b_2,b_3,...,b_n) <= 0
                     # chi(b_1,a_2,...,a_n) * chi(a_1,b_2,b_3,...,b_n) >= 0
