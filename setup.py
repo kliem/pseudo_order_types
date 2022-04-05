@@ -23,7 +23,7 @@ extensions = [
 
 setup(
     name='pseudo_order_types',
-    version='0.1.1',
+    version='0.1.2a',
     description='Generate all pseudo order' +
             ' types for small point sets in the plane',
     long_description=long_description,
@@ -45,5 +45,6 @@ setup(
         'Intended Audience :: Science/Research',
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
         'Programming Language :: Python :: 3',
+        'Programming Language :: Cython',
         'Topic :: Scientific/Engineering :: Mathematics']
     )
